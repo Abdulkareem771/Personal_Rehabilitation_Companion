@@ -1,0 +1,19 @@
+{
+  "name": "Shoulder Recovery",
+  "short_name": "Recovery",
+  "description": "Personal rehabilitation and fitness companion.",
+  "start_url": "/Personal_Rehabilitation_Companion/",
+  "scope": "/Personal_Rehabilitation_Companion/",
+  "display": "standalone",
+  "background_color": "#f7fafc",
+  "theme_color": "#0f766e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/Personal_Rehabilitation_Companion/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
