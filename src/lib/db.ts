@@ -1,0 +1,144 @@
+import Dexie, { type Table } from "dexie";
+import type {
+  UserProfile,
+  AppSettings,
+  MediaAsset,
+  Exercise,
+  ExerciseNote,
+  ExerciseCollection,
+  ExerciseDifficultyCalibration,
+  ExerciseLog,
+  PersonalRecord,
+  Program,
+  ProgramVersion,
+  WorkoutSession,
+  RecoveryEntry,
+  PainEntry,
+  NutritionEntry,
+  Medication,
+  MedicationLog,
+  Measurement,
+  Goal,
+  Milestone,
+  StreakRecord,
+  Infographic,
+  MedicalEvent,
+  MedicalImage,
+  PostureSession,
+  DailyChecklist,
+} from "@/types";
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ReForge Database — single Dexie instance
+// All tables use `id` as the primary key (string / uuid).
+// `syncedAt` is null until Phase 2 Supabase integration.
+// ─────────────────────────────────────────────────────────────────────────────
+
+class ReForgeDB extends Dexie {
+  // ── Core ──────────────────────────────────────────────────────────────────
+  profile!:           Table<UserProfile>;
+  settings!:          Table<AppSettings>;
+
+  // ── Media ─────────────────────────────────────────────────────────────────
+  mediaAssets!:       Table<MediaAsset>;
+
+  // ── Exercises ─────────────────────────────────────────────────────────────
+  exercises!:          Table<Exercise>;
+  exerciseNotes!:      Table<ExerciseNote>;
+  exerciseCollections!:Table<ExerciseCollection>;
+  difficultyCalibrations!: Table<ExerciseDifficultyCalibration>;
+
+  // ── Programs ──────────────────────────────────────────────────────────────
+  programs!:          Table<Program>;
+  programVersions!:   Table<ProgramVersion>;
+
+  // ── History ───────────────────────────────────────────────────────────────
+  workoutSessions!:   Table<WorkoutSession>;
+  exerciseLogs!:      Table<ExerciseLog>;
+  personalRecords!:   Table<PersonalRecord>;
+
+  // ── Recovery ──────────────────────────────────────────────────────────────
+  recoveryEntries!:   Table<RecoveryEntry>;
+  streaks!:           Table<StreakRecord>;
+  dailyChecklists!:   Table<DailyChecklist>;
+  postureSessions!:   Table<PostureSession>;
+
+  // ── Health ────────────────────────────────────────────────────────────────
+  painEntries!:       Table<PainEntry>;
+  nutritionEntries!:  Table<NutritionEntry>;
+  medications!:       Table<Medication>;
+  medicationLogs!:    Table<MedicationLog>;
+  measurements!:      Table<Measurement>;
+
+  // ── Goals ─────────────────────────────────────────────────────────────────
+  goals!:             Table<Goal>;
+  milestones!:        Table<Milestone>;
+  infographics!:      Table<Infographic>;
+
+  // ── Medical ───────────────────────────────────────────────────────────────
+  medicalEvents!:     Table<MedicalEvent>;
+  medicalImages!:     Table<MedicalImage>;
+
+  constructor() {
+    super("ReForgeDB");
+
+    this.version(1).stores({
+      // id is always the primary key
+      profile:               "id",
+      settings:              "id",
+
+      mediaAssets:           "id, type, *tags, *exerciseIds",
+
+      exercises:             "id, category, safety, difficulty, *tags, *collectionIds",
+      exerciseNotes:         "id, exerciseId, date",
+      exerciseCollections:   "id, isDefault",
+      difficultyCalibrations:"exerciseId",
+
+      programs:              "id, status, type",
+      programVersions:       "id, programId, versionNumber",
+
+      workoutSessions:       "id, status, startedAt, programId",
+      exerciseLogs:          "id, exerciseId, sessionId, date",
+      personalRecords:       "id, exerciseId",
+
+      recoveryEntries:       "id, date",
+      streaks:               "dimension",
+      dailyChecklists:       "id, date",
+      postureSessions:       "id, date",
+
+      painEntries:           "id, date",
+      nutritionEntries:      "id, date",
+      medications:           "id, isActive",
+      medicationLogs:        "id, medicationId, date",
+      measurements:          "id, date",
+
+      goals:                 "id, type, status",
+      milestones:            "id, programId",
+      infographics:          "id, category, *tags",
+
+      medicalEvents:         "id, date, type",
+      medicalImages:         "id, imagingType, date",
+    });
+  }
+}
+
+export const db = new ReForgeDB();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Seed helper — called once on first app launch
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function seedDefaultDataIfEmpty(): Promise<void> {
+  const profileCount = await db.profile.count();
+  if (profileCount > 0) return; // already seeded
+
+  const { seedProfile, seedExercises, seedPrograms, seedCollections } =
+    await import("@/data/seeds");
+
+  await db.transaction("rw", [db.profile, db.settings, db.exercises, db.programs, db.exerciseCollections], async () => {
+    await seedProfile();
+    await seedExercises();
+    await seedPrograms();
+    await seedCollections();
+  });
+}
