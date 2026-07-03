@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {
   Dumbbell, BookOpen, UserCheck, Activity, CheckCircle2, Circle, Flame,
   ShieldCheck, ArrowRight, Sparkles, Sliders, HelpCircle, AlertTriangle, Cpu,
-  Calendar, History, MessageSquareQuote, Zap, LayoutDashboard
+  Calendar, History, MessageSquareQuote, Zap, LayoutDashboard, Sun, Trophy
 } from "lucide-react";
 import { useProfile, useActiveProgram, useGoals, useWeeklyReviews, useExercises } from "@/hooks/useData";
 import { useAppStore } from "@/store/appStore";
@@ -39,6 +39,29 @@ export function Dashboard() {
   const [selectedReviewIdx, setSelectedReviewIdx] = useState(0);
   const currentReview = weeklyReviews[selectedReviewIdx] || weeklyReviews[0];
   const [showAskAIWhy, setShowAskAIWhy] = useState(false);
+
+  // Morning Check-In state
+  const today = new Date().toISOString().slice(0, 10);
+  const checkInStorageKey = `reforge-checkin-${today}`;
+  const [checkInDone, setCheckInDone] = useState(() => !!localStorage.getItem(checkInStorageKey));
+  const [checkInPain,  setCheckInPain]  = useState<number | null>(null);
+  const [checkInSleep, setCheckInSleep] = useState<number | null>(null);
+  const [checkInEnergy,setCheckInEnergy]= useState<number | null>(null);
+
+  const handleCheckInTap = (type: "pain" | "sleep" | "energy", val: number) => {
+    if (type === "pain")   setCheckInPain(val);
+    if (type === "sleep")  setCheckInSleep(val);
+    if (type === "energy") setCheckInEnergy(val);
+    const newPain   = type === "pain"   ? val : checkInPain;
+    const newSleep  = type === "sleep"  ? val : checkInSleep;
+    const newEnergy = type === "energy" ? val : checkInEnergy;
+    if (newPain !== null && newSleep !== null && newEnergy !== null) {
+      setTimeout(() => {
+        localStorage.setItem(checkInStorageKey, JSON.stringify({ pain: newPain, sleep: newSleep, energy: newEnergy }));
+        setCheckInDone(true);
+      }, 1200);
+    }
+  };
 
   // Checklist state
   const [checklist, setChecklist] = useState([
@@ -150,6 +173,59 @@ export function Dashboard() {
       {activeTab === "daily" && (
         <div className="grid gap-6 lg:grid-cols-3 animate-fade-in">
           <div className="lg:col-span-2 space-y-6">
+
+            {/* Morning Check-In — Duolingo-style, only if not done today */}
+            {!checkInDone && (
+              <div className="rounded-2xl border-2 border-primary/30 bg-primary/5 p-5 space-y-4 shadow-md">
+                <div className="flex items-center gap-2">
+                  <Sun size={18} className="text-primary" />
+                  <span className="text-sm font-black text-foreground">Morning Check-In</span>
+                  <span className="text-xs text-muted-foreground font-medium ml-auto">≈15 sec</span>
+                </div>
+                {/* Pain */}
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-extrabold text-muted-foreground w-20 shrink-0">Pain Today</span>
+                  <div className="flex gap-1.5">
+                    {(["😀","🙂","😐","☹️","😣"] as const).map((emoji, i) => (
+                      <button key={i} onClick={() => handleCheckInTap("pain", i)}
+                        className={`text-xl p-1 rounded-lg transition-all ${
+                          checkInPain === i ? "scale-125 ring-2 ring-primary" : "opacity-60 hover:opacity-100 hover:scale-110"
+                        }`}>{emoji}</button>
+                    ))}
+                  </div>
+                </div>
+                {/* Sleep */}
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-extrabold text-muted-foreground w-20 shrink-0">Sleep</span>
+                  <div className="flex gap-1.5">
+                    {[1,2,3,4,5].map((n) => (
+                      <button key={n} onClick={() => handleCheckInTap("sleep", n)}
+                        className={`text-lg transition-all ${
+                          (checkInSleep ?? 0) >= n ? "text-amber-400 scale-110" : "text-muted-foreground/40 hover:text-amber-300"
+                        }`}>⭐</button>
+                    ))}
+                  </div>
+                </div>
+                {/* Energy */}
+                <div className="flex items-center gap-3">
+                  <span className="text-xs font-extrabold text-muted-foreground w-20 shrink-0">Energy</span>
+                  <div className="flex gap-1.5">
+                    {[1,2,3,4,5].map((n) => (
+                      <button key={n} onClick={() => handleCheckInTap("energy", n)}
+                        className={`text-lg transition-all ${
+                          (checkInEnergy ?? 0) >= n ? "text-primary scale-110" : "text-muted-foreground/40 hover:text-primary/50"
+                        }`}>⚡</button>
+                    ))}
+                  </div>
+                </div>
+                {checkInPain !== null && checkInSleep !== null && checkInEnergy !== null && (
+                  <div className="flex items-center gap-2 text-green-500 font-black text-sm animate-fade-in">
+                    <CheckCircle2 size={16} /> Check-in saved!
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Today's Workout Card */}
             <Card className="border-2 border-primary/20 shadow-lg overflow-hidden bg-card">
               <CardHeader className="bg-secondary/40 border-b border-border pb-4">
@@ -333,6 +409,30 @@ export function Dashboard() {
                     <ArrowRight size={13} />
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Rehab Personal Records */}
+            <Card className="shadow-md border-border">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Trophy size={16} className="text-amber-500" /> Rehab Records
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {[
+                  { label: "Pain-Free Streak", value: "14 Days", icon: "🔥", color: "text-orange-500" },
+                  { label: "Best Compliance",   value: "100%",    icon: "🎯", color: "text-green-500" },
+                  { label: "Ext. Rotation ROM", value: "82°",     icon: "📐", color: "text-primary"   },
+                ].map((pr) => (
+                  <div key={pr.label} className="flex items-center gap-3 p-3 rounded-xl bg-secondary/20 border border-border">
+                    <span className="text-xl">{pr.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-[10px] font-black uppercase text-muted-foreground">{pr.label}</p>
+                      <p className={`text-sm font-black ${pr.color}`}>{pr.value}</p>
+                    </div>
+                  </div>
+                ))}
               </CardContent>
             </Card>
           </div>

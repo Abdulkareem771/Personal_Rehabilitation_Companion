@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Moon, Sun, Palette, Download, Upload, ShieldCheck, HeartPulse, RotateCcw, CheckCircle2 } from "lucide-react";
+import { Moon, Sun, Palette, Download, Upload, ShieldCheck, HeartPulse, RotateCcw, CheckCircle2, Dumbbell, Volume2, VolumeX, Zap } from "lucide-react";
 import { useAppStore } from "@/store/appStore";
 import { useProfile } from "@/hooks/useData";
 import { db } from "@/lib/db";
@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 
 export function Settings() {
-  const { theme, setTheme } = useAppStore();
+  const { theme, setTheme, workoutPrefs, setWorkoutPrefs } = useAppStore();
   const profile = useProfile();
 
   const [weights, setWeights] = useState<RecoveryWeights>(DEFAULT_RECOVERY_WEIGHTS);
@@ -81,6 +81,101 @@ export function Settings() {
               </button>
             );
           })}
+        </CardContent>
+      </Card>
+
+      {/* Workout Behavior */}
+      <Card className="shadow-md border-border">
+        <CardHeader>
+          <CardTitle className="text-lg flex items-center gap-2">
+            <Dumbbell size={20} className="text-primary" /> Workout Behavior
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-5">
+
+          {/* Interface Mode */}
+          <div className="space-y-2">
+            <span className="text-xs font-black uppercase tracking-wider text-muted-foreground">Interface Mode</span>
+            <div className="grid grid-cols-2 gap-3">
+              {(["gym", "clinical"] as const).map((mode) => (
+                <button key={mode} onClick={() => setWorkoutPrefs({ interfaceMode: mode })}
+                  className={`p-4 rounded-2xl border-2 text-sm font-bold transition-all ${
+                    workoutPrefs.interfaceMode === mode
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border bg-secondary/20 text-muted-foreground hover:border-primary/40"
+                  }`}
+                >
+                  {mode === "gym" ? (
+                    <><span className="text-2xl block mb-1">🏋️</span>Gym Floor<br/><span className="text-[10px] font-medium opacity-70">Minimal UI, big buttons</span></>
+                  ) : (
+                    <><span className="text-2xl block mb-1">🩺</span>Clinical<br/><span className="text-[10px] font-medium opacity-70">Full anatomical detail</span></>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Toggle rows */}
+          <div className="space-y-3 pt-1">
+            {[
+              {
+                key: "focusModeEnabled" as const,
+                label: "Focus Mode",
+                desc: "Hide all secondary UI — only video, sets, rest, and Complete button",
+                icon: <Zap size={16} className="text-primary" />,
+              },
+              {
+                key: "autoAdvance" as const,
+                label: "Auto-Advance",
+                desc: "Automatically move to the next exercise after your final set completes",
+                icon: <CheckCircle2 size={16} className="text-green-500" />,
+              },
+              {
+                key: "audioBeepsEnabled" as const,
+                label: "Audio Countdown Cues",
+                desc: "Play short tones during the final 3 seconds of rest and at completion",
+                icon: workoutPrefs.audioBeepsEnabled
+                  ? <Volume2 size={16} className="text-primary" />
+                  : <VolumeX size={16} className="text-muted-foreground" />,
+              },
+            ].map((row) => (
+              <div key={row.key} className="flex items-center justify-between gap-4 p-4 rounded-2xl border border-border bg-secondary/10">
+                <div className="flex items-start gap-3">
+                  <div className="mt-0.5">{row.icon}</div>
+                  <div>
+                    <p className="text-sm font-extrabold text-foreground">{row.label}</p>
+                    <p className="text-[11px] text-muted-foreground font-medium leading-snug">{row.desc}</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setWorkoutPrefs({ [row.key]: !workoutPrefs[row.key] })}
+                  className={`relative shrink-0 w-12 h-6 rounded-full transition-colors ${
+                    workoutPrefs[row.key] ? "bg-primary" : "bg-secondary"
+                  }`}
+                >
+                  <span className={`absolute top-1 w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                    workoutPrefs[row.key] ? "translate-x-7" : "translate-x-1"
+                  }`} />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Default Rest Duration */}
+          <div className="space-y-2">
+            <span className="text-xs font-black uppercase tracking-wider text-muted-foreground">Default Rest Duration</span>
+            <div className="flex gap-2">
+              {[45, 60, 90, 120].map((sec) => (
+                <button key={sec} onClick={() => setWorkoutPrefs({ defaultRestSeconds: sec })}
+                  className={`flex-1 py-3 rounded-xl border-2 text-sm font-black transition-all ${
+                    workoutPrefs.defaultRestSeconds === sec
+                      ? "border-primary bg-primary/10 text-primary"
+                      : "border-border bg-secondary/20 text-muted-foreground"
+                  }`}
+                >{sec}s</button>
+              ))}
+            </div>
+          </div>
         </CardContent>
       </Card>
 

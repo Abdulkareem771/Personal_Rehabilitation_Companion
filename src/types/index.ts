@@ -344,6 +344,47 @@ export interface WorkoutModeState {
   learningTipShown: boolean;
 }
 
+// ─── Journal & Check-In ──────────────────────────────────────────────────────
+
+export interface DailyCheckIn {
+  id: string;
+  date: ISODateString;        // "YYYY-MM-DD"
+  painLevel: number;          // 0-4 (emoji scale: 0=great, 4=bad)
+  sleepQuality: number;       // 1-5 stars
+  energyLevel: number;        // 1-5 stars
+  createdAt: ISOTimestamp;
+}
+
+export interface JournalEntry {
+  id: string;
+  sessionId: string;
+  date: ISODateString;
+  prompt: string;             // rotating reflective question
+  response: string;           // user's free-text answer
+  exerciseIds: string[];      // exercises performed in the session
+  createdAt: ISOTimestamp;
+}
+
+// ─── Workout Preferences (persisted in appStore) ─────────────────────────────
+
+export interface WorkoutPreferences {
+  interfaceMode: "gym" | "clinical";  // defaults to "gym"
+  focusModeEnabled: boolean;           // hide all non-essential UI
+  autoAdvance: boolean;                // auto-proceed after final set
+  audioBeepsEnabled: boolean;          // rest timer countdown tones
+  defaultRestSeconds: number;          // 45 | 60 | 90 | 120
+  availableEquipment: Equipment[];     // set on pre-workout launcher
+}
+
+export const DEFAULT_WORKOUT_PREFERENCES: WorkoutPreferences = {
+  interfaceMode: "gym",
+  focusModeEnabled: false,
+  autoAdvance: true,
+  audioBeepsEnabled: true,
+  defaultRestSeconds: 60,
+  availableEquipment: ["bodyweight", "band", "dumbbell", "barbell", "machine", "cable", "kettlebell", "other"],
+};
+
 // ─── Recovery ────────────────────────────────────────────────────────────────
 
 export type ShoulderStatus = "stable" | "clicking" | "subluxation" | "guarded" | "painful";

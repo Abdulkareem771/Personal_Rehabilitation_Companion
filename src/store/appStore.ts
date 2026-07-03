@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Theme, UserProfile } from "@/types";
+import type { Theme, UserProfile, WorkoutPreferences } from "@/types";
+import { DEFAULT_WORKOUT_PREFERENCES } from "@/types";
 
 interface AppState {
   // ── User ────────────────────────────────────────────────────────────────
@@ -23,6 +24,10 @@ interface AppState {
   // ── Learning Tips ────────────────────────────────────────────────────────
   learningTipsEnabled: boolean;
   setLearningTipsEnabled: (enabled: boolean) => void;
+
+  // ── Workout Preferences ──────────────────────────────────────────
+  workoutPrefs: WorkoutPreferences;
+  setWorkoutPrefs: (prefs: Partial<WorkoutPreferences>) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -49,6 +54,10 @@ export const useAppStore = create<AppState>()(
 
       learningTipsEnabled: true,
       setLearningTipsEnabled: (enabled) => set({ learningTipsEnabled: enabled }),
+
+      workoutPrefs: DEFAULT_WORKOUT_PREFERENCES,
+      setWorkoutPrefs: (prefs) =>
+        set((s) => ({ workoutPrefs: { ...s.workoutPrefs, ...prefs } })),
     }),
     {
       name: "reforge-app-store",
@@ -57,6 +66,7 @@ export const useAppStore = create<AppState>()(
         sidebarCollapsed: state.sidebarCollapsed,
         activeProgramId: state.activeProgramId,
         learningTipsEnabled: state.learningTipsEnabled,
+        workoutPrefs: state.workoutPrefs,
       }),
     }
   )
