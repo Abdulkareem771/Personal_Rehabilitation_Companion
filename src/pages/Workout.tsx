@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CheckCircle2, ChevronRight, ChevronLeft, Play, Pause, RotateCcw,
-  AlertCircle, HelpCircle, Dumbbell, Sparkles
+  AlertCircle, HelpCircle, Dumbbell, Sparkles, BookOpen, ShieldCheck
 } from "lucide-react";
 import { useActiveProgram, useExercises } from "@/hooks/useData";
 import { useWorkoutStore } from "@/store/workoutStore";
@@ -151,14 +151,37 @@ export function Workout() {
       <div className="grid gap-6 md:grid-cols-3">
         {/* Left 2 Cols: Exercise Instructions & Logging */}
         <div className="md:col-span-2 space-y-6">
-          <Card className="border-border shadow-md">
-            <CardHeader className="bg-secondary/20 pb-4 border-b border-border flex flex-row items-start justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <Badge className="capitalize">{currentEx?.category || "Rehab"}</Badge>
-                  <Badge variant="safe">Prescribed: {currentPE.sets} × {currentPE.reps}</Badge>
+          <Card className="border-border shadow-md overflow-hidden rounded-2xl bg-card">
+            {/* Visual-First Top Hero Container */}
+            <div className="aspect-[16/9] sm:aspect-[21/9] w-full bg-secondary/80 relative overflow-hidden flex items-center justify-center border-b border-border">
+              {currentEx?.content?.formGuideImage ? (
+                <img
+                  src={`${import.meta.env.BASE_URL || "/"}${currentEx.content.formGuideImage}`.replace(/\/+/g, "/")}
+                  alt={currentEx?.name}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = `/${currentEx.content.formGuideImage}`;
+                  }}
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-primary/10 via-secondary to-background flex items-center justify-center text-muted-foreground font-bold">
+                  3D Visual Guide
                 </div>
-                <CardTitle className="text-2xl">{currentEx?.name || currentPE.exerciseId}</CardTitle>
+              )}
+
+              <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                <Badge className="capitalize text-[10px] font-black bg-background/85 text-foreground backdrop-blur-md shadow-sm border border-border/50">
+                  {currentEx?.category || "Rehab"}
+                </Badge>
+                <Badge variant={currentEx?.safety === "green" ? "safe" : "caution"} className="text-[10px] uppercase font-black shadow-sm">
+                  <ShieldCheck size={12} className="mr-1" /> {currentEx?.safety === "green" ? "⭐⭐ Safe" : "⚠️ Caution"}
+                </Badge>
+              </div>
+            </div>
+
+            <CardHeader className="p-6 pb-4 border-b border-border flex flex-row items-start justify-between gap-4">
+              <div>
+                <CardTitle className="text-xl sm:text-2xl font-black">{currentEx?.name || currentPE.exerciseId}</CardTitle>
               </div>
               <Button
                 variant="outline"
@@ -166,50 +189,24 @@ export function Workout() {
                 onClick={() => setWhyOpen(true)}
                 className="shrink-0 font-bold border-primary text-primary hover:bg-primary/10 gap-1.5"
               >
-                <HelpCircle size={16} /> Why This Exercise?
+                <HelpCircle size={16} /> Why?
               </Button>
             </CardHeader>
+
             <CardContent className="p-6 space-y-6">
-              {/* Instructions */}
-              <div className="space-y-3">
-                <span className="text-xs font-extrabold uppercase tracking-wider text-muted-foreground">
-                  Execution Checklist
-                </span>
-                <ol className="space-y-2 list-decimal list-inside text-sm text-foreground font-medium">
-                  {(currentEx?.content?.instructions || ["Follow clinician cues."]).map((inst, idx) => (
-                    <li key={idx} className="leading-relaxed pl-1">{inst}</li>
-                  ))}
-                </ol>
-              </div>
-
-              {/* Action Form Guide Image */}
-              {currentEx?.content?.formGuideImage && (
-                <div className="aspect-[16/9] w-full rounded-2xl bg-secondary/25 border flex items-center justify-center overflow-hidden p-1 shadow-inner">
-                  <img
-                    src={`${import.meta.env.BASE_URL || "/"}${currentEx.content.formGuideImage}`.replace(/\/+/g, "/")}
-                    alt={currentEx.name}
-                    className="max-h-full object-contain rounded-xl hover:scale-102 transition-all"
-                    onError={(e) => {
-                      e.currentTarget.src = `/${currentEx.content.formGuideImage}`;
-                    }}
-                  />
+              {/* Gym-Ready At-A-Glance Stat Blocks */}
+              <div className="grid grid-cols-3 gap-3 p-4 bg-primary/5 rounded-2xl border border-primary/20">
+                <div className="text-center">
+                  <span className="text-[10px] font-black uppercase text-muted-foreground block">Prescribed</span>
+                  <span className="text-lg sm:text-xl font-black text-foreground">{currentPE.sets} × {currentPE.reps}</span>
                 </div>
-              )}
-
-              {/* Tempo & Breathing Box */}
-
-              <div className="grid sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-secondary/30 border border-border">
-                <div>
-                  <span className="text-[10px] font-extrabold uppercase text-muted-foreground">Tempo Cue</span>
-                  <p className="font-extrabold text-sm text-primary">
-                    {currentPE.tempoOverride || currentEx?.content?.tempoCue || "Controlled 2-1-2"}
-                  </p>
+                <div className="text-center border-x border-border/60">
+                  <span className="text-[10px] font-black uppercase text-muted-foreground block">Tempo Cue</span>
+                  <span className="text-base sm:text-lg font-black text-primary">{currentPE.tempoOverride || currentEx?.content?.tempoCue || "3-1-3"}</span>
                 </div>
-                <div>
-                  <span className="text-[10px] font-extrabold uppercase text-muted-foreground">Breathing</span>
-                  <p className="font-bold text-xs text-foreground">
-                    {currentEx?.content?.breathingCues || "Exhale on effort"}
-                  </p>
+                <div className="text-center">
+                  <span className="text-[10px] font-black uppercase text-muted-foreground block">Rest Period</span>
+                  <span className="text-base sm:text-lg font-black text-foreground">{currentEx?.content?.restSeconds || 60}s</span>
                 </div>
               </div>
 
@@ -268,6 +265,39 @@ export function Workout() {
                   <CheckCircle2 size={18} /> Record Set & Start Rest Timer
                 </Button>
               </div>
+
+              {/* Collapsible Clinical & Execution Details */}
+              <details className="group rounded-2xl border border-border bg-secondary/20 overflow-hidden">
+                <summary className="p-4 font-extrabold text-xs sm:text-sm text-foreground cursor-pointer flex items-center justify-between hover:bg-secondary/40 transition-colors list-none select-none">
+                  <span className="flex items-center gap-2">
+                    <BookOpen size={16} className="text-primary" />
+                    Show Clinical & Execution Instructions (Checklist, Breathing)
+                  </span>
+                  <span className="text-xs text-primary group-open:rotate-180 transition-transform font-bold">▼</span>
+                </summary>
+                <div className="p-5 pt-3 border-t border-border/60 space-y-4 text-sm font-medium">
+                  <div>
+                    <span className="text-xs font-black uppercase tracking-wider text-muted-foreground block mb-2">Execution Checklist</span>
+                    <ol className="space-y-1.5 list-decimal list-inside text-foreground">
+                      {(currentEx?.content?.instructions || ["Follow clinician cues."]).map((inst, idx) => (
+                        <li key={idx} className="leading-relaxed pl-1">{inst}</li>
+                      ))}
+                    </ol>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-3 pt-2">
+                    <div className="p-3.5 rounded-xl bg-background border border-border">
+                      <span className="text-[10px] font-extrabold uppercase text-muted-foreground block">Breathing Cue</span>
+                      <p className="text-xs font-bold text-foreground mt-0.5">{currentEx?.content?.breathingCues || "Exhale on effort"}</p>
+                    </div>
+                    {currentEx?.content?.commonMistakes && currentEx.content.commonMistakes.length > 0 && (
+                      <div className="p-3.5 rounded-xl bg-background border border-border">
+                        <span className="text-[10px] font-extrabold uppercase text-rehab-red block">Common Mistakes</span>
+                        <p className="text-xs font-bold text-foreground mt-0.5">{currentEx.content.commonMistakes[0]}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </details>
             </CardContent>
           </Card>
         </div>

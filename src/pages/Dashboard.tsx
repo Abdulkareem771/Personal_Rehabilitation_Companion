@@ -5,7 +5,7 @@ import {
   ShieldCheck, ArrowRight, Sparkles, Sliders, HelpCircle, AlertTriangle, Cpu,
   Calendar, History, MessageSquareQuote, Zap, LayoutDashboard
 } from "lucide-react";
-import { useProfile, useActiveProgram, useGoals, useWeeklyReviews } from "@/hooks/useData";
+import { useProfile, useActiveProgram, useGoals, useWeeklyReviews, useExercises } from "@/hooks/useData";
 import { useAppStore } from "@/store/appStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -23,7 +23,15 @@ export function Dashboard() {
   const activeProgram = useActiveProgram();
   const goals = useGoals();
   const weeklyReviews = useWeeklyReviews();
+  const allExercises = useExercises();
   const userName = profile?.name || "Abdulkareem";
+
+  // Resolve today's exercises for visual preview
+  const firstDay = activeProgram?.weeks[0]?.days[0];
+  const todayExerciseItems = firstDay?.blocks.flatMap((b) => b.exercises) || [];
+  const todayExercises = todayExerciseItems
+    .map((item) => allExercises.find((ex) => ex.id === item.exerciseId))
+    .filter(Boolean);
 
   // Streamlined UX tab state
   const [activeTab, setActiveTab] = useState<"daily" | "simulator" | "weekly">("daily");
@@ -167,16 +175,44 @@ export function Dashboard() {
                 </div>
 
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl bg-secondary/30 border border-border space-y-2">
-                    <span className="text-[11px] font-extrabold uppercase text-muted-foreground">Up Next Today</span>
-                    <p className="font-bold text-base text-foreground">Day A: Rotator Cuff Focus</p>
-                    <p className="text-xs text-muted-foreground">5 exercises · 18 mins · Band & Bodyweight</p>
+                  <div className="p-4 rounded-xl bg-secondary/30 border border-border space-y-3 flex flex-col justify-between">
+                    <div>
+                      <span className="text-[11px] font-extrabold uppercase text-muted-foreground">Up Next Today</span>
+                      <p className="font-bold text-base text-foreground mt-0.5">Day A: Rotator Cuff Focus</p>
+                      <p className="text-xs text-muted-foreground">{todayExercises.length || 5} exercises · 18 mins · Band & Bodyweight</p>
+
+                      {/* Visual Previews Row */}
+                      {todayExercises.length > 0 && (
+                        <div className="mt-3 grid grid-cols-3 gap-1.5">
+                          {todayExercises.slice(0, 3).map((ex) => {
+                            const imgPath = ex?.content.formGuideImage
+                              ? `${import.meta.env.BASE_URL || "/"}${ex.content.formGuideImage}`
+                              : null;
+                            return (
+                              <div key={ex?.id} className="h-14 rounded-lg bg-secondary overflow-hidden relative border border-border/60 group">
+                                {imgPath ? (
+                                  <img src={imgPath} alt={ex?.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform" />
+                                ) : (
+                                  <div className="w-full h-full flex items-center justify-center text-[9px] font-bold text-muted-foreground p-1 text-center">
+                                    {ex?.name.slice(0, 12)}
+                                  </div>
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex items-end p-1">
+                                  <span className="text-[9px] font-extrabold text-white leading-tight truncate">{ex?.name}</span>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+
                     <Button
                       size="sm"
                       onClick={() => navigate("/workout")}
                       className="w-full mt-2 font-bold shadow-sm"
                     >
-                      Launch Workout <ArrowRight size={14} className="ml-1.5" />
+                      Launch Visual Workout <ArrowRight size={14} className="ml-1.5" />
                     </Button>
                   </div>
 

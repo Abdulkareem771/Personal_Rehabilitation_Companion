@@ -150,7 +150,8 @@ export const defaultExercises: Exercise[] = [
       learningTips: [
         "Lead the pull with your elbows, spreading them apart like wings.",
         "Aim to finish the movement in a double-biceps pose with your thumbs pointing backward."
-      ]
+      ],
+      formGuideImage: "ex_face_pull.png"
     },
     mediaIds: [],
     relatedExerciseIds: ["band-pull-apart", "prone-yt", "band-external-rotation"],
@@ -198,7 +199,8 @@ export const defaultExercises: Exercise[] = [
       learningTips: [
         "Imagine crushing a pencil between your shoulder blades at the peak of every rep.",
         "Keep your chest proud and collarbones wide."
-      ]
+      ],
+      formGuideImage: "ex_band_pull_apart.png"
     },
     mediaIds: [],
     relatedExerciseIds: ["face-pull", "wall-angel", "prone-yt"],
@@ -337,7 +339,8 @@ export const defaultExercises: Exercise[] = [
       safetyWarnings: "Stop lowering limbs immediately if your lower back peels off the mat.",
       personalizedWhy: "A stable lumbopelvic core provides a solid foundation for energy transfer through the kinetic chain, reducing compensatory strain on the shoulder complex during arm movements.",
       expectedBenefit: 4,
-      learningTips: ["Imagine holding a piece of paper under your lower back that someone is trying to pull out."]
+      learningTips: ["Imagine holding a piece of paper under your lower back that someone is trying to pull out."],
+      formGuideImage: "ex_dead_bug.png"
     },
     mediaIds: [],
     relatedExerciseIds: ["pallof-press", "bird-dog"],
@@ -379,7 +382,8 @@ export const defaultExercises: Exercise[] = [
       safetyWarnings: "Keep weight tucked close to sternum; never let arms reach away from torso.",
       personalizedWhy: "Maintaining leg and hip strength during shoulder recovery preserves overall metabolic fitness without loading the shoulder girdle in vulnerable overhead or back-racked positions.",
       expectedBenefit: 4,
-      learningTips: ["Keep elbows tucked close to your ribs to protect your shoulder labrum."]
+      learningTips: ["Keep elbows tucked close to your ribs to protect your shoulder labrum."],
+      formGuideImage: "ex_goblet_squat.png"
     },
     mediaIds: [],
     relatedExerciseIds: ["romanian-deadlift", "leg-press"],
@@ -421,7 +425,8 @@ export const defaultExercises: Exercise[] = [
       safetyWarnings: "Never allow shoulders to slump forward at the bottom of the hinge.",
       personalizedWhy: "Holding dumbbells with locked-down scapulae provides isometric strengthening for shoulder stabilizers while conditioning the essential posterior chain.",
       expectedBenefit: 4,
-      learningTips: ["Keep dumbbells skimming your thighs and shins the entire way down."]
+      learningTips: ["Keep dumbbells skimming your thighs and shins the entire way down."],
+      formGuideImage: "ex_romanian_deadlift.png"
     },
     mediaIds: [],
     relatedExerciseIds: ["goblet-squat"],

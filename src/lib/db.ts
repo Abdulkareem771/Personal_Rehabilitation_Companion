@@ -145,9 +145,10 @@ export async function seedDefaultDataIfEmpty(): Promise<void> {
       await seedWeeklyReviews();
     });
   } else {
-    // Unconditionally seed media assets to capture new additions
-    await db.transaction("rw", [db.mediaAssets], async () => {
+    // Unconditionally seed media assets and exercises to capture new additions and updated form guides
+    await db.transaction("rw", [db.mediaAssets, db.exercises], async () => {
       await seedMediaAssets();
+      await seedExercises();
     });
     if (reviewCount === 0) {
       await db.transaction("rw", [db.weeklyReviews], async () => {

@@ -62,52 +62,77 @@ export function KnowledgeBase() {
 
       {/* Exercise Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((ex) => (
-          <Card
-            key={ex.id}
-            onClick={() => navigate(`/knowledge/${ex.id}`)}
-            className="group cursor-pointer border-border hover:border-primary/50 transition-all shadow-sm hover:shadow-md flex flex-col justify-between overflow-hidden"
-          >
-            <div>
-              {/* Header Banner */}
-              <div className="h-32 bg-gradient-to-br from-secondary via-secondary/60 to-background p-4 flex flex-col justify-between border-b border-border">
-                <div className="flex items-center justify-between">
-                  <Badge className="capitalize text-[10px] font-black">{ex.category}</Badge>
-                  <Badge variant={ex.safety === "green" ? "safe" : "caution"} className="text-[10px] uppercase font-bold">
-                    <ShieldCheck size={12} className="mr-1" /> {ex.safety}
-                  </Badge>
+        {filtered.map((ex) => {
+          const imgPath = ex.content.formGuideImage 
+            ? `${import.meta.env.BASE_URL || "/"}${ex.content.formGuideImage}`
+            : null;
+
+          return (
+            <Card
+              key={ex.id}
+              onClick={() => navigate(`/knowledge/${ex.id}`)}
+              className="group cursor-pointer border-border hover:border-primary/50 transition-all shadow-sm hover:shadow-xl flex flex-col justify-between overflow-hidden bg-card rounded-2xl"
+            >
+              <div>
+                {/* Big Visual Hero Banner */}
+                <div className="h-48 w-full bg-secondary/80 relative overflow-hidden flex items-center justify-center border-b border-border">
+                  {imgPath ? (
+                    <img
+                      src={imgPath}
+                      alt={ex.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary/10 via-secondary to-background flex items-center justify-center text-muted-foreground font-bold">
+                      3D Visual Guide
+                    </div>
+                  )}
+
+                  {/* Overlaid Badges */}
+                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                    <Badge className="capitalize text-[10px] font-black bg-background/85 text-foreground backdrop-blur-md shadow-sm border border-border/50">
+                      {ex.category}
+                    </Badge>
+                    <Badge variant={ex.safety === "green" ? "safe" : "caution"} className="text-[10px] uppercase font-black shadow-sm">
+                      <ShieldCheck size={12} className="mr-1" /> {ex.safety === "green" ? "⭐⭐ Safe" : "⚠️ Caution"}
+                    </Badge>
+                  </div>
+
+                  <div className="absolute bottom-2 left-3 right-3 flex items-center justify-between text-[10px] font-extrabold text-white/90 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg pointer-events-none">
+                    <span className="flex items-center gap-1">
+                      <Sparkles size={12} className="text-primary" /> Personalized Rationale
+                    </span>
+                    <span>Level {ex.difficulty}</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground">
-                  <Sparkles size={14} className="text-primary" /> Personalized Rationale Included
+
+                <CardHeader className="p-5 pb-3">
+                  <CardTitle className="text-base sm:text-lg font-black group-hover:text-primary transition-colors line-clamp-1">
+                    {ex.name}
+                  </CardTitle>
+                  <p className="text-xs text-muted-foreground line-clamp-2 font-medium mt-1 leading-relaxed">
+                    {ex.content.purpose}
+                  </p>
+                </CardHeader>
+              </div>
+
+              <CardContent className="p-5 pt-0 space-y-4">
+                <div className="flex flex-wrap gap-1.5">
+                  {ex.muscles.slice(0, 3).map((m) => (
+                    <span key={m} className="text-[10px] font-extrabold px-2 py-0.5 rounded-md bg-secondary/80 text-muted-foreground">
+                      {m}
+                    </span>
+                  ))}
                 </div>
-              </div>
 
-              <CardHeader className="p-5 pb-3">
-                <CardTitle className="text-lg font-extrabold group-hover:text-primary transition-colors line-clamp-1">
-                  {ex.name}
-                </CardTitle>
-                <p className="text-xs text-muted-foreground line-clamp-2 font-medium mt-1">
-                  {ex.content.purpose}
-                </p>
-              </CardHeader>
-            </div>
-
-            <CardContent className="p-5 pt-0 space-y-4">
-              <div className="flex flex-wrap gap-1">
-                {ex.muscles.slice(0, 3).map((m) => (
-                  <span key={m} className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-secondary/80 text-muted-foreground">
-                    {m}
-                  </span>
-                ))}
-              </div>
-
-              <div className="pt-3 border-t border-border flex items-center justify-between text-xs font-bold text-primary">
-                <span>Inspect Biomechanics</span>
-                <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                <div className="pt-3 border-t border-border flex items-center justify-between text-xs font-black text-primary">
+                  <span>Explore Biomechanics & Guide</span>
+                  <ArrowRight size={14} className="group-hover:translate-x-1.5 transition-transform" />
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
       {filtered.length === 0 && (
