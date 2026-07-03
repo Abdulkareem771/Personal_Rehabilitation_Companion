@@ -4,9 +4,13 @@ import { HashRouter } from "react-router-dom";
 import { App } from "./App";
 import "./styles.css";
 
-if ("serviceWorker" in navigator && import.meta.env.PROD) {
+if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/Personal_Rehabilitation_Companion/sw.js");
+    navigator.serviceWorker.getRegistrations().then((registrations) => {
+      for (const registration of registrations) {
+        registration.unregister();
+      }
+    });
   });
 }
 
