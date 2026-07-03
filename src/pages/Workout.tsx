@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   CheckCircle2, ChevronRight, ChevronLeft, Play, Pause, RotateCcw,
-  AlertCircle, HelpCircle, Dumbbell, Sparkles, BookOpen, ShieldCheck
+  AlertCircle, HelpCircle, Dumbbell, Sparkles, BookOpen, ShieldCheck, AlertTriangle
 } from "lucide-react";
 import { useActiveProgram, useExercises } from "@/hooks/useData";
 import { useWorkoutStore } from "@/store/workoutStore";
@@ -23,6 +23,7 @@ export function Workout() {
   const [painLevel, setPainLevel] = useState<number>(0);
   const [repsInput, setRepsInput] = useState<number>(15);
   const [weightInput, setWeightInput] = useState<number>(0);
+  const [dismissedReminders, setDismissedReminders] = useState<Record<string, boolean>>({});
 
   // Auto-tick rest timer every second when active
   useEffect(() => {
@@ -154,7 +155,19 @@ export function Workout() {
           <Card className="border-border shadow-md overflow-hidden rounded-2xl bg-card">
             {/* Visual-First Top Hero Container */}
             <div className="aspect-[16/9] sm:aspect-[21/9] w-full bg-secondary/80 relative overflow-hidden flex items-center justify-center border-b border-border">
-              {currentEx?.content?.formGuideImage ? (
+              {currentEx?.content?.media?.loop?.webm || currentEx?.content?.media?.loop?.mp4 ? (
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  poster={`${import.meta.env.BASE_URL || "/"}${currentEx.content.media?.poster || currentEx.content.formGuideImage}`.replace(/\/+/g, "/")}
+                  className="w-full h-full object-cover"
+                >
+                  {currentEx.content.media?.loop?.webm && <source src={`${import.meta.env.BASE_URL || "/"}${currentEx.content.media.loop.webm}`.replace(/\/+/g, "/")} type="video/webm" />}
+                  {currentEx.content.media?.loop?.mp4 && <source src={`${import.meta.env.BASE_URL || "/"}${currentEx.content.media.loop.mp4}`.replace(/\/+/g, "/")} type="video/mp4" />}
+                </video>
+              ) : currentEx?.content?.formGuideImage ? (
                 <img
                   src={`${import.meta.env.BASE_URL || "/"}${currentEx.content.formGuideImage}`.replace(/\/+/g, "/")}
                   alt={currentEx?.name}
@@ -192,6 +205,29 @@ export function Workout() {
                 <HelpCircle size={16} /> Why?
               </Button>
             </CardHeader>
+
+            {/* Pinned Personal "Remember" Alert Box */}
+            {currentEx?.content?.rememberCue && !dismissedReminders[currentEx.id] && (
+              <div className="mx-6 mt-4 p-4 rounded-2xl bg-amber-500/10 border-2 border-amber-500/40 flex items-start justify-between gap-3 shadow-sm animate-fade-in">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle size={20} className="text-amber-500 shrink-0 mt-0.5" />
+                  <div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 block">Pinned Personal Reminder</span>
+                    <p className="text-sm font-extrabold text-foreground mt-0.5 leading-snug">
+                      {currentEx.content.rememberCue}
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setDismissedReminders((prev) => ({ ...prev, [currentEx.id]: true }))}
+                  className="text-xs font-bold text-muted-foreground hover:text-foreground shrink-0 h-8 px-2.5"
+                >
+                  Dismiss
+                </Button>
+              </div>
+            )}
 
             <CardContent className="p-6 space-y-6">
               {/* Gym-Ready At-A-Glance Stat Blocks */}

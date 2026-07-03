@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Play, ShieldCheck, Sparkles, Wrench, AlertTriangle, Lightbulb, Image as ImageIcon } from "lucide-react";
 import { useExerciseById, useMediaAssets, useExerciseLogs } from "@/hooks/useData";
@@ -7,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export function ExerciseDetail() {
   const { id } = useParams<{ id: string }>();
@@ -15,6 +17,7 @@ export function ExerciseDetail() {
   const mediaAssets = useMediaAssets(id || "");
   const logs = useExerciseLogs(id || "");
   const store = useWorkoutStore();
+  const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
 
 
 
@@ -37,6 +40,28 @@ export function ExerciseDetail() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 animate-fade-in pb-16">
+      {/* Coaching Video Modal */}
+      <Dialog open={!!activeVideoUrl} onOpenChange={(open) => !open && setActiveVideoUrl(null)}>
+        <DialogContent className="max-w-3xl p-6 bg-card border-border">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-black flex items-center gap-2">
+              <Play size={18} className="text-rehab-red fill-rehab-red" /> Expert Clinical Coaching Demonstration
+            </DialogTitle>
+          </DialogHeader>
+          {activeVideoUrl && (
+            <div className="aspect-video w-full rounded-xl overflow-hidden bg-black mt-2 shadow-inner">
+              <iframe
+                src={activeVideoUrl.replace("watch?v=", "embed/")}
+                title="Coaching Video"
+                className="w-full h-full border-0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
+
       {/* Back button & Header */}
       <div className="flex items-center justify-between gap-4">
         <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="font-bold gap-1.5">
@@ -109,6 +134,71 @@ export function ExerciseDetail() {
 
         {/* Tab 2: Learn & Why (Deep Biomechanical & Medical Rationale) */}
         <TabsContent value="learn" className="space-y-6">
+          {/* Tier 1 & Tier 2 Media Section */}
+          <Card className="border-border shadow-md overflow-hidden bg-card">
+            <div className="grid sm:grid-cols-2 gap-0">
+              {/* Tier 1 Loop / Form Guide */}
+              <div className="aspect-[16/9] bg-secondary/80 relative flex items-center justify-center overflow-hidden border-b sm:border-b-0 sm:border-r border-border">
+                {exercise.content.media?.loop?.webm || exercise.content.media?.loop?.mp4 ? (
+                  <video
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    poster={`${import.meta.env.BASE_URL || "/"}${exercise.content.media?.poster || exercise.content.formGuideImage}`.replace(/\/+/g, "/")}
+                    className="w-full h-full object-cover"
+                  >
+                    {exercise.content.media?.loop?.webm && <source src={`${import.meta.env.BASE_URL || "/"}${exercise.content.media.loop.webm}`.replace(/\/+/g, "/")} type="video/webm" />}
+                    {exercise.content.media?.loop?.mp4 && <source src={`${import.meta.env.BASE_URL || "/"}${exercise.content.media.loop.mp4}`.replace(/\/+/g, "/")} type="video/mp4" />}
+                  </video>
+                ) : exercise.content.formGuideImage ? (
+                  <img
+                    src={`${import.meta.env.BASE_URL || "/"}${exercise.content.formGuideImage}`.replace(/\/+/g, "/")}
+                    alt={exercise.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : null}
+                <div className="absolute bottom-2 left-2 right-2 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-lg text-[10px] font-black text-white flex items-center justify-between">
+                  <span>Tier 1: Motion Loop / Form Guide</span>
+                  <span className="text-primary">100% Offline</span>
+                </div>
+              </div>
+
+              {/* Tier 2 Tutorials & Cues */}
+              <div className="p-6 flex flex-col justify-between space-y-4">
+                <div className="space-y-2">
+                  <span className="text-xs font-black uppercase tracking-wider text-primary block">Tier 2: Expert Coaching Tutorial</span>
+                  <h3 className="text-base font-black text-foreground">Learn Form & Mechanics from Clinical Specialists</h3>
+                  <p className="text-xs text-muted-foreground font-medium leading-relaxed">
+                    Watch long-form physical therapy walkthroughs covering joint positioning, muscular activation, and injury prevention cues.
+                  </p>
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  {exercise.content.media?.tutorials && exercise.content.media.tutorials.length > 0 ? (
+                    exercise.content.media.tutorials.map((tut, i) => (
+                      <Button
+                        key={i}
+                        onClick={() => setActiveVideoUrl(tut.url)}
+                        className="w-full py-5 font-black text-xs sm:text-sm bg-rehab-red hover:bg-rehab-red/90 text-white shadow-md flex items-center justify-center gap-2"
+                      >
+                        <Play size={16} fill="currentColor" /> ▶ Watch Coaching Video ({tut.source.toUpperCase()})
+                      </Button>
+                    ))
+                  ) : (
+                    <Button
+                      onClick={() => window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(exercise.name + " physical therapy form")}`, "_blank")}
+                      variant="outline"
+                      className="w-full font-bold text-xs gap-2 border-primary text-primary hover:bg-primary/10"
+                    >
+                      <Play size={14} /> Search YouTube Tutorials
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Card>
+
           {/* Personalized WHY */}
           {exercise.content.personalizedWhy && (
             <Card className="border-primary/40 bg-primary/5 shadow-md">

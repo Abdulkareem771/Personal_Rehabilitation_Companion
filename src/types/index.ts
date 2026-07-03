@@ -82,6 +82,27 @@ export type ExerciseTag =
   | "home"               | "bodyweight"    | "bilateral"    | "unilateral"
   | "scapular"           | "posterior-chain";
 
+export interface ExerciseTutorial {
+  title: string;
+  url: string;
+  source: "youtube" | "vimeo";
+}
+
+export interface VideoLoop {
+  webm?: string;
+  mp4?: string;
+}
+
+export interface ExerciseMedia {
+  thumbnail?: string;       // Tier 0: 50-150KB fast recognition image
+  poster?: string;          // High-res poster for video loop pre-loading
+  loop?: VideoLoop;         // Tier 1: 5-8 sec looping execution clip
+  mistakeLoop?: VideoLoop;  // Tier 1b: 5 sec swipeable Correct vs. Incorrect comparison
+  tutorials?: ExerciseTutorial[]; // Tier 2: Expert coaching videos
+  infographics?: string[];  // Tier 3: Anatomy & biomechanical diagrams
+  documents?: string[];     // Tier 3: PDF protocols
+}
+
 export interface ExerciseContent {
   // What to do
   purpose: string;
@@ -90,6 +111,13 @@ export interface ExerciseContent {
   tempoCue: string;      // e.g. "3-1-3 (lower 3s · hold 1s · raise 3s)"
   restSeconds: number;
   expectedDurationMin: number;
+
+  // Personal Reminders
+  rememberCue?: string;
+  rememberDismissed?: boolean;
+
+  // Three-Tier Media Architecture
+  media?: ExerciseMedia;
 
   // How to do it correctly
   commonMistakes: string[];

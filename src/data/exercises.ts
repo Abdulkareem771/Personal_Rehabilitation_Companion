@@ -48,7 +48,19 @@ export const defaultExercises: Exercise[] = [
         "Squeeze your shoulder blade gently downward before starting the outward rotation.",
         "Think of your forearm as a door swinging cleanly on its hinges."
       ],
-      formGuideImage: "ex_band_external_rotation.png"
+      formGuideImage: "ex_band_external_rotation.png",
+      rememberCue: "Keep elbow clamped against the rolled towel. Don't let your anterior shoulder roll forward.",
+      media: {
+        thumbnail: "ex_band_external_rotation.png",
+        poster: "ex_band_external_rotation.png",
+        tutorials: [
+          {
+            title: "Rotator Cuff External Rotation Form & Common Mistakes (E3 Rehab)",
+            url: "https://www.youtube.com/watch?v=sBiq_8Gf9P8",
+            source: "youtube"
+          }
+        ]
+      }
     },
 
     mediaIds: [],
@@ -99,7 +111,19 @@ export const defaultExercises: Exercise[] = [
         "Imagine trying to touch the ceiling with your knuckles while keeping your back on the mat.",
         "Focus on feeling a deep wrapping sensation along the side of your ribs under your armpits."
       ],
-      formGuideImage: "ex_serratus_punch.png"
+      formGuideImage: "ex_serratus_punch.png",
+      rememberCue: "Push through your palms to glide shoulder blades forward around your ribcage without shrugging.",
+      media: {
+        thumbnail: "ex_serratus_punch.png",
+        poster: "ex_serratus_punch.png",
+        tutorials: [
+          {
+            title: "Serratus Anterior Activation & Protraction Cues",
+            url: "https://www.youtube.com/watch?v=Cq_TqQ3zK0c",
+            source: "youtube"
+          }
+        ]
+      }
     },
 
     mediaIds: [],
@@ -151,7 +175,19 @@ export const defaultExercises: Exercise[] = [
         "Lead the pull with your elbows, spreading them apart like wings.",
         "Aim to finish the movement in a double-biceps pose with your thumbs pointing backward."
       ],
-      formGuideImage: "ex_face_pull.png"
+      formGuideImage: "ex_face_pull.png",
+      rememberCue: "Pull towards forehead height while externally rotating your wrists so knuckles point backward.",
+      media: {
+        thumbnail: "ex_face_pull.png",
+        poster: "ex_face_pull.png",
+        tutorials: [
+          {
+            title: "How To Do Face Pulls Correctly For Posture & Shoulders",
+            url: "https://www.youtube.com/watch?v=V8d_peUTXcs",
+            source: "youtube"
+          }
+        ]
+      }
     },
     mediaIds: [],
     relatedExerciseIds: ["band-pull-apart", "prone-yt", "band-external-rotation"],
@@ -200,7 +236,19 @@ export const defaultExercises: Exercise[] = [
         "Imagine crushing a pencil between your shoulder blades at the peak of every rep.",
         "Keep your chest proud and collarbones wide."
       ],
-      formGuideImage: "ex_band_pull_apart.png"
+      formGuideImage: "ex_band_pull_apart.png",
+      rememberCue: "Keep ribs tucked down and elbows slightly unlocked. Squeeze shoulder blades together firmly.",
+      media: {
+        thumbnail: "ex_band_pull_apart.png",
+        poster: "ex_band_pull_apart.png",
+        tutorials: [
+          {
+            title: "Band Pull Aparts For Shoulder Health & Posture",
+            url: "https://www.youtube.com/watch?v=JmNZ4n8vNRA",
+            source: "youtube"
+          }
+        ]
+      }
     },
     mediaIds: [],
     relatedExerciseIds: ["face-pull", "wall-angel", "prone-yt"],
@@ -249,7 +297,19 @@ export const defaultExercises: Exercise[] = [
         "Keep your lower ribs tucked down against the wall at all times.",
         "Press elbows outward slightly into the wall as you slide."
       ],
-      formGuideImage: "ex_wall_slide.png"
+      formGuideImage: "ex_wall_slide.png",
+      rememberCue: "Keep lower back and forearms flush against the wall. Drive elbows upward in a V-shape.",
+      media: {
+        thumbnail: "ex_wall_slide.png",
+        poster: "ex_wall_slide.png",
+        tutorials: [
+          {
+            title: "Scapular Wall Slides for Shoulder Impingement & Overhead Mobility",
+            url: "https://www.youtube.com/watch?v=k_9z4E0w0G0",
+            source: "youtube"
+          }
+        ]
+      }
     },
 
     mediaIds: [],
@@ -296,7 +356,19 @@ export const defaultExercises: Exercise[] = [
         "Always lead the movement with your shoulder blades, not your hands.",
         "Point your thumbs upward like hitchhiking to maximize external rotation."
       ],
-      formGuideImage: "ex_prone_yt.png"
+      formGuideImage: "ex_prone_yt.png",
+      rememberCue: "Point thumbs upward like hitchhiking to maximize external rotation. Lift from scapulae, not lower back.",
+      media: {
+        thumbnail: "ex_prone_yt.png",
+        poster: "ex_prone_yt.png",
+        tutorials: [
+          {
+            title: "Prone Y & T Raises for Lower Trapezius & Rotator Cuff Strength",
+            url: "https://www.youtube.com/watch?v=fHkG4_j0m0M",
+            source: "youtube"
+          }
+        ]
+      }
     },
 
     mediaIds: [],
@@ -340,7 +412,19 @@ export const defaultExercises: Exercise[] = [
       personalizedWhy: "A stable lumbopelvic core provides a solid foundation for energy transfer through the kinetic chain, reducing compensatory strain on the shoulder complex during arm movements.",
       expectedBenefit: 4,
       learningTips: ["Imagine holding a piece of paper under your lower back that someone is trying to pull out."],
-      formGuideImage: "ex_dead_bug.png"
+      formGuideImage: "ex_dead_bug.png",
+      rememberCue: "Press lower back flat into the mat. Never let it peel off as your limbs extend.",
+      media: {
+        thumbnail: "ex_dead_bug.png",
+        poster: "ex_dead_bug.png",
+        tutorials: [
+          {
+            title: "How To Do The Dead Bug Core Exercise Correctly",
+            url: "https://www.youtube.com/watch?v=4X5jW5E_4kQ",
+            source: "youtube"
+          }
+        ]
+      }
     },
     mediaIds: [],
     relatedExerciseIds: ["pallof-press", "bird-dog"],
@@ -383,7 +467,19 @@ export const defaultExercises: Exercise[] = [
       personalizedWhy: "Maintaining leg and hip strength during shoulder recovery preserves overall metabolic fitness without loading the shoulder girdle in vulnerable overhead or back-racked positions.",
       expectedBenefit: 4,
       learningTips: ["Keep elbows tucked close to your ribs to protect your shoulder labrum."],
-      formGuideImage: "ex_goblet_squat.png"
+      formGuideImage: "ex_goblet_squat.png",
+      rememberCue: "Keep elbows tucked close to your ribs and weight pinned against your chest.",
+      media: {
+        thumbnail: "ex_goblet_squat.png",
+        poster: "ex_goblet_squat.png",
+        tutorials: [
+          {
+            title: "How To Goblet Squat (Form & Biomechanics by SquatUniversity)",
+            url: "https://www.youtube.com/watch?v=MeIiIdhvXT4",
+            source: "youtube"
+          }
+        ]
+      }
     },
     mediaIds: [],
     relatedExerciseIds: ["romanian-deadlift", "leg-press"],
@@ -426,7 +522,19 @@ export const defaultExercises: Exercise[] = [
       personalizedWhy: "Holding dumbbells with locked-down scapulae provides isometric strengthening for shoulder stabilizers while conditioning the essential posterior chain.",
       expectedBenefit: 4,
       learningTips: ["Keep dumbbells skimming your thighs and shins the entire way down."],
-      formGuideImage: "ex_romanian_deadlift.png"
+      formGuideImage: "ex_romanian_deadlift.png",
+      rememberCue: "Lock shoulder blades down and back. Skim dumbbells down shins while hinging hips backward.",
+      media: {
+        thumbnail: "ex_romanian_deadlift.png",
+        poster: "ex_romanian_deadlift.png",
+        tutorials: [
+          {
+            title: "Dumbbell Romanian Deadlift Form Guide & Hip Hinge Mechanics",
+            url: "https://www.youtube.com/watch?v=jeykN5090f4",
+            source: "youtube"
+          }
+        ]
+      }
     },
     mediaIds: [],
     relatedExerciseIds: ["goblet-squat"],
@@ -468,7 +576,19 @@ export const defaultExercises: Exercise[] = [
       personalizedWhy: "Forward head posture directly alters scapular rest position, closing the subacromial space and creating secondary shoulder instability.",
       expectedBenefit: 4,
       learningTips: ["Imagine sliding your head straight backward along a horizontal shelf."],
-      formGuideImage: "ex_chin_tuck.png"
+      formGuideImage: "ex_chin_tuck.png",
+      rememberCue: "Slide chin straight back as if making a double chin while elongating the back of your neck.",
+      media: {
+        thumbnail: "ex_chin_tuck.png",
+        poster: "ex_chin_tuck.png",
+        tutorials: [
+          {
+            title: "How to Fix Forward Head Posture (Chin Tucks)",
+            url: "https://www.youtube.com/watch?v=wQylcaDsTzU",
+            source: "youtube"
+          }
+        ]
+      }
     },
 
     mediaIds: [],
