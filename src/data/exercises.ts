@@ -47,8 +47,10 @@ export const defaultExercises: Exercise[] = [
         "Keep your elbow within 2 cm of your body throughout the movement. If your elbow drifts, the infraspinatus loses its mechanical advantage.",
         "Squeeze your shoulder blade gently downward before starting the outward rotation.",
         "Think of your forearm as a door swinging cleanly on its hinges."
-      ]
+      ],
+      formGuideImage: "ex_band_external_rotation.png"
     },
+
     mediaIds: [],
     relatedExerciseIds: ["side-lying-external-rotation", "face-pull", "serratus-punch"],
     collectionIds: [],
@@ -96,8 +98,10 @@ export const defaultExercises: Exercise[] = [
       learningTips: [
         "Imagine trying to touch the ceiling with your knuckles while keeping your back on the mat.",
         "Focus on feeling a deep wrapping sensation along the side of your ribs under your armpits."
-      ]
+      ],
+      formGuideImage: "ex_serratus_punch.png"
     },
+
     mediaIds: [],
     relatedExerciseIds: ["wall-slide", "scapular-shrug", "band-external-rotation"],
     collectionIds: [],
@@ -242,8 +246,10 @@ export const defaultExercises: Exercise[] = [
       learningTips: [
         "Keep your lower ribs tucked down against the wall at all times.",
         "Press elbows outward slightly into the wall as you slide."
-      ]
+      ],
+      formGuideImage: "ex_wall_slide.png"
     },
+
     mediaIds: [],
     relatedExerciseIds: ["serratus-punch", "wall-angel", "scapular-shrug"],
     collectionIds: [],
@@ -287,8 +293,10 @@ export const defaultExercises: Exercise[] = [
       learningTips: [
         "Always lead the movement with your shoulder blades, not your hands.",
         "Point your thumbs upward like hitchhiking to maximize external rotation."
-      ]
+      ],
+      formGuideImage: "ex_prone_yt.png"
     },
+
     mediaIds: [],
     relatedExerciseIds: ["face-pull", "band-pull-apart"],
     collectionIds: [],
@@ -454,8 +462,10 @@ export const defaultExercises: Exercise[] = [
       safetyWarnings: "Keep gaze level with horizon.",
       personalizedWhy: "Forward head posture directly alters scapular rest position, closing the subacromial space and creating secondary shoulder instability.",
       expectedBenefit: 4,
-      learningTips: ["Imagine sliding your head straight backward along a horizontal shelf."]
+      learningTips: ["Imagine sliding your head straight backward along a horizontal shelf."],
+      formGuideImage: "ex_chin_tuck.png"
     },
+
     mediaIds: [],
     relatedExerciseIds: ["band-pull-apart", "wall-slide"],
     collectionIds: [],

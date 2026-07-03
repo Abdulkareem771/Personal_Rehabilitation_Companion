@@ -182,7 +182,22 @@ export function Workout() {
                 </ol>
               </div>
 
+              {/* Action Form Guide Image */}
+              {currentEx?.content?.formGuideImage && (
+                <div className="aspect-[16/9] w-full rounded-2xl bg-secondary/25 border flex items-center justify-center overflow-hidden p-1 shadow-inner">
+                  <img
+                    src={`${import.meta.env.BASE_URL || "/"}${currentEx.content.formGuideImage}`.replace(/\/+/g, "/")}
+                    alt={currentEx.name}
+                    className="max-h-full object-contain rounded-xl hover:scale-102 transition-all"
+                    onError={(e) => {
+                      e.currentTarget.src = `/${currentEx.content.formGuideImage}`;
+                    }}
+                  />
+                </div>
+              )}
+
               {/* Tempo & Breathing Box */}
+
               <div className="grid sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-secondary/30 border border-border">
                 <div>
                   <span className="text-[10px] font-extrabold uppercase text-muted-foreground">Tempo Cue</span>

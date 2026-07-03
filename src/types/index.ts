@@ -108,7 +108,9 @@ export interface ExerciseContent {
 
   // Learning Mode pool (randomly shown pre-exercise)
   learningTips: string[];
+  formGuideImage?: string;
 }
+
 
 export interface Exercise {
   id: string;
