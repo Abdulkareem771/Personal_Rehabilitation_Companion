@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft, Play, ShieldCheck, Sparkles, Wrench, AlertTriangle, Lightbulb } from "lucide-react";
-import { useExerciseById } from "@/hooks/useData";
+import { ArrowLeft, Play, ShieldCheck, Sparkles, Wrench, AlertTriangle, Lightbulb, Image as ImageIcon } from "lucide-react";
+import { useExerciseById, useMediaAssets } from "@/hooks/useData";
 import { useWorkoutStore } from "@/store/workoutStore";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -11,7 +11,9 @@ export function ExerciseDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const exercise = useExerciseById(id || "");
+  const mediaAssets = useMediaAssets(id || "");
   const store = useWorkoutStore();
+
 
   if (!exercise) {
     return (
@@ -170,7 +172,41 @@ export function ExerciseDetail() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Infographics & Biomechanical Diagrams */}
+          {mediaAssets.length > 0 && (
+            <Card className="shadow-md border-border">
+              <CardHeader className="pb-3 bg-secondary/20">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <ImageIcon size={18} className="text-primary" /> Clinical Biomechanics & Infographics ({mediaAssets.length})
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4 grid sm:grid-cols-2 gap-4">
+                {mediaAssets.map((m) => (
+                  <div key={m.id} className="p-4 rounded-2xl border bg-card space-y-2.5 shadow-sm">
+                    <div className="flex items-center justify-between">
+                      <Badge variant="outline" className="text-[10px] uppercase font-extrabold text-primary">
+                        {m.type}
+                      </Badge>
+                      <span className="text-[10px] font-mono text-muted-foreground">{m.filename}</span>
+                    </div>
+                    <p className="text-xs font-semibold text-foreground leading-relaxed">
+                      {m.caption}
+                    </p>
+                    <div className="flex flex-wrap gap-1 pt-1">
+                      {m.tags.map((t) => (
+                        <span key={t} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-secondary text-muted-foreground">
+                          #{t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
         </TabsContent>
+
 
         {/* Tab 3: History */}
         <TabsContent value="history">

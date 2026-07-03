@@ -1,6 +1,12 @@
 import { format, parseISO, differenceInCalendarDays, isToday, isYesterday } from "date-fns";
 
+/** Returns current date as YYYY-MM-DD string. */
+export function todayISO(): string {
+  return new Date().toISOString().split("T")[0];
+}
+
 /** Format ISO date string for display. */
+
 export function formatDate(iso: string, fmt = "dd MMM yyyy"): string {
   try { return format(parseISO(iso), fmt); }
   catch { return iso; }

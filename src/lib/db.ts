@@ -130,15 +130,23 @@ export const db = new ReForgeDB();
 
 export async function seedDefaultDataIfEmpty(): Promise<void> {
   const profileCount = await db.profile.count();
-  if (profileCount > 0) return; // already seeded
+  const mediaCount = await db.mediaAssets.count();
 
-  const { seedProfile, seedExercises, seedPrograms, seedCollections } =
+  const { seedProfile, seedExercises, seedPrograms, seedCollections, seedMediaAssets } =
     await import("@/data/seeds");
 
-  await db.transaction("rw", [db.profile, db.settings, db.exercises, db.programs, db.exerciseCollections], async () => {
-    await seedProfile();
-    await seedExercises();
-    await seedPrograms();
-    await seedCollections();
-  });
+  if (profileCount === 0) {
+    await db.transaction("rw", [db.profile, db.settings, db.exercises, db.programs, db.exerciseCollections, db.goals, db.mediaAssets], async () => {
+      await seedProfile();
+      await seedExercises();
+      await seedPrograms();
+      await seedCollections();
+      await seedMediaAssets();
+    });
+  } else if (mediaCount === 0) {
+    await db.transaction("rw", [db.mediaAssets], async () => {
+      await seedMediaAssets();
+    });
+  }
 }
+

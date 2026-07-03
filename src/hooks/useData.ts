@@ -1,11 +1,12 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db";
 import { useAppStore } from "@/store/appStore";
-import type { Exercise, Program, ExerciseCollection, UserProfile, Goal } from "@/types";
+import type { Exercise, Program, ExerciseCollection, UserProfile, Goal, MediaAsset } from "@/types";
 
 export function useProfile(): UserProfile | undefined {
   return useLiveQuery(() => db.profile.get("default-user"), []);
 }
+
 
 export function useExercises(category?: string): Exercise[] {
   const exercises = useLiveQuery(async () => {
@@ -48,3 +49,15 @@ export function useGoals(): Goal[] {
   const goals = useLiveQuery(() => db.goals.toArray(), []);
   return goals ?? [];
 }
+
+export function useMediaAssets(exerciseId?: string): MediaAsset[] {
+  const media = useLiveQuery(async () => {
+    const all = await db.mediaAssets.toArray();
+    if (exerciseId) {
+      return all.filter((m) => m.exerciseIds.includes(exerciseId));
+    }
+    return all;
+  }, [exerciseId]);
+  return media ?? [];
+}
+

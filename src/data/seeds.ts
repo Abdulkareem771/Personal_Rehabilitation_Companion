@@ -4,6 +4,8 @@ import type { UserProfile, Goal } from "@/types";
 import { DEFAULT_RECOVERY_WEIGHTS } from "@/types";
 import { defaultExercises } from "./exercises";
 import { defaultPrograms } from "./defaultPrograms";
+import { defaultMediaAssets } from "./mediaAssets";
+
 
 export async function seedProfile(): Promise<void> {
   const profile: UserProfile = {
@@ -81,3 +83,11 @@ export async function seedCollections(): Promise<void> {
     await db.exerciseCollections.put(c);
   }
 }
+
+export async function seedMediaAssets(): Promise<void> {
+  for (const media of defaultMediaAssets) {
+    await db.mediaAssets.put(media);
+  }
+}
+
+
