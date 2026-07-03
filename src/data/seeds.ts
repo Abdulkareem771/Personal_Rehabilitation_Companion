@@ -90,4 +90,52 @@ export async function seedMediaAssets(): Promise<void> {
   }
 }
 
+export async function seedWeeklyReviews(): Promise<void> {
+  const reviews = [
+    {
+      id: uid(),
+      weekNumber: 3,
+      dateStr: "2026-06-28",
+      workoutsCompleted: 3,
+      targetWorkouts: 3,
+      avgPainLevel: 1.4,
+      painDeltaPct: -56,
+      romAbductionDeg: 165,
+      recoveryScore: 88,
+      directiveText: "Remain in Phase 1 for 1 more week to solidify scapular muscle memory.",
+      directiveReason: "External rotation ROM has stabilized at 72° while resting pain remained <= 1.5 across 100% workout adherence.",
+    },
+    {
+      id: uid(),
+      weekNumber: 2,
+      dateStr: "2026-06-21",
+      workoutsCompleted: 3,
+      targetWorkouts: 3,
+      avgPainLevel: 2.1,
+      painDeltaPct: -34,
+      romAbductionDeg: 155,
+      recoveryScore: 82,
+      directiveText: "Continue Phase 1 Rotator Cuff Stabilization protocol.",
+      directiveReason: "Anterior clicking resolved during external rotation holds.",
+    },
+    {
+      id: uid(),
+      weekNumber: 1,
+      dateStr: "2026-06-14",
+      workoutsCompleted: 2,
+      targetWorkouts: 3,
+      avgPainLevel: 3.2,
+      painDeltaPct: 0,
+      romAbductionDeg: 145,
+      recoveryScore: 74,
+      directiveText: "Focus on gentle pendulums and serratus wall slides.",
+      directiveReason: "Initial post-acute assessment phase.",
+    },
+  ];
+  for (const r of reviews) {
+    await db.weeklyReviews.put(r);
+  }
+}
+
+
 

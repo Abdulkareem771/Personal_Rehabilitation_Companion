@@ -1,9 +1,10 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db";
 import { useAppStore } from "@/store/appStore";
-import type { Exercise, Program, ExerciseCollection, UserProfile, Goal, MediaAsset, ExerciseLog, Measurement, ProgramVersion } from "@/types";
+import type { Exercise, Program, ExerciseCollection, UserProfile, Goal, MediaAsset, ExerciseLog, Measurement, ProgramVersion, WeeklyReview } from "@/types";
 
 export function useProfile(): UserProfile | undefined {
+
 
   return useLiveQuery(() => db.profile.get("default-user"), []);
 }
@@ -87,6 +88,12 @@ export function useProgramVersions(programId?: string): ProgramVersion[] {
   }, [programId]);
   return versions ?? [];
 }
+
+export function useWeeklyReviews(): WeeklyReview[] {
+  const reviews = useLiveQuery(() => db.weeklyReviews.orderBy("weekNumber").reverse().toArray(), []);
+  return reviews ?? [];
+}
+
 
 
 

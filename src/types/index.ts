@@ -144,11 +144,26 @@ export interface ExerciseCollection {
   description?: string;
   iconEmoji?: string;
   exerciseIds: string[];
-  isDefault: boolean;
   createdAt: ISOTimestamp;
 }
 
+export interface WeeklyReview {
+
+  id: string;
+  weekNumber: number;
+  dateStr: string;
+  workoutsCompleted: number;
+  targetWorkouts: number;
+  avgPainLevel: number;
+  painDeltaPct: number; // e.g. -56 for 56% decrease
+  romAbductionDeg: number;
+  recoveryScore: number;
+  directiveText: string;
+  directiveReason: string;
+}
+
 // ─── Exercise Difficulty Wizard ───────────────────────────────────────────────
+
 
 export type DifficultyResponse = "easy" | "normal" | "hard" | "painful" | "impossible";
 

@@ -26,7 +26,9 @@ import type {
   MedicalImage,
   PostureSession,
   DailyChecklist,
+  WeeklyReview,
 } from "@/types";
+
 
 // ─────────────────────────────────────────────────────────────────────────────
 // ReForge Database — single Dexie instance
@@ -78,49 +80,46 @@ class ReForgeDB extends Dexie {
   // ── Medical ───────────────────────────────────────────────────────────────
   medicalEvents!:     Table<MedicalEvent>;
   medicalImages!:     Table<MedicalImage>;
+  weeklyReviews!:     Table<WeeklyReview>;
 
   constructor() {
     super("ReForgeDB");
 
     this.version(1).stores({
-      // id is always the primary key
       profile:               "id",
       settings:              "id",
-
       mediaAssets:           "id, type, *tags, *exerciseIds",
-
       exercises:             "id, category, safety, difficulty, *tags, *collectionIds",
       exerciseNotes:         "id, exerciseId, date",
       exerciseCollections:   "id, isDefault",
       difficultyCalibrations:"exerciseId",
-
       programs:              "id, status, type",
       programVersions:       "id, programId, versionNumber",
-
       workoutSessions:       "id, status, startedAt, programId",
       exerciseLogs:          "id, exerciseId, sessionId, date",
       personalRecords:       "id, exerciseId",
-
       recoveryEntries:       "id, date",
       streaks:               "dimension",
       dailyChecklists:       "id, date",
       postureSessions:       "id, date",
-
       painEntries:           "id, date",
       nutritionEntries:      "id, date",
       medications:           "id, isActive",
       medicationLogs:        "id, medicationId, date",
       measurements:          "id, date",
-
       goals:                 "id, type, status",
       milestones:            "id, programId",
       infographics:          "id, category, *tags",
-
       medicalEvents:         "id, date, type",
       medicalImages:         "id, imagingType, date",
     });
+
+    this.version(2).stores({
+      weeklyReviews:         "id, weekNumber, dateStr",
+    });
   }
 }
+
 
 export const db = new ReForgeDB();
 
@@ -131,22 +130,32 @@ export const db = new ReForgeDB();
 export async function seedDefaultDataIfEmpty(): Promise<void> {
   const profileCount = await db.profile.count();
   const mediaCount = await db.mediaAssets.count();
+  const reviewCount = await db.weeklyReviews.count();
 
-  const { seedProfile, seedExercises, seedPrograms, seedCollections, seedMediaAssets } =
+  const { seedProfile, seedExercises, seedPrograms, seedCollections, seedMediaAssets, seedWeeklyReviews } =
     await import("@/data/seeds");
 
   if (profileCount === 0) {
-    await db.transaction("rw", [db.profile, db.settings, db.exercises, db.programs, db.exerciseCollections, db.goals, db.mediaAssets], async () => {
+    await db.transaction("rw", [db.profile, db.settings, db.exercises, db.programs, db.exerciseCollections, db.goals, db.mediaAssets, db.weeklyReviews], async () => {
       await seedProfile();
       await seedExercises();
       await seedPrograms();
       await seedCollections();
       await seedMediaAssets();
+      await seedWeeklyReviews();
     });
-  } else if (mediaCount === 0) {
-    await db.transaction("rw", [db.mediaAssets], async () => {
-      await seedMediaAssets();
-    });
+  } else {
+    if (mediaCount === 0) {
+      await db.transaction("rw", [db.mediaAssets], async () => {
+        await seedMediaAssets();
+      });
+    }
+    if (reviewCount === 0) {
+      await db.transaction("rw", [db.weeklyReviews], async () => {
+        await seedWeeklyReviews();
+      });
+    }
   }
 }
+
 
