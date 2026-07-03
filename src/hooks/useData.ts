@@ -1,11 +1,13 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/db";
 import { useAppStore } from "@/store/appStore";
-import type { Exercise, Program, ExerciseCollection, UserProfile, Goal, MediaAsset } from "@/types";
+import type { Exercise, Program, ExerciseCollection, UserProfile, Goal, MediaAsset, ExerciseLog, Measurement, ProgramVersion } from "@/types";
 
 export function useProfile(): UserProfile | undefined {
+
   return useLiveQuery(() => db.profile.get("default-user"), []);
 }
+
 
 
 export function useExercises(category?: string): Exercise[] {
@@ -60,4 +62,32 @@ export function useMediaAssets(exerciseId?: string): MediaAsset[] {
   }, [exerciseId]);
   return media ?? [];
 }
+
+export function useExerciseLogs(exerciseId?: string): ExerciseLog[] {
+  const logs = useLiveQuery(async () => {
+    if (exerciseId) {
+      return await db.exerciseLogs.where("exerciseId").equals(exerciseId).sortBy("date");
+    }
+    return await db.exerciseLogs.orderBy("date").toArray();
+  }, [exerciseId]);
+  return logs ?? [];
+}
+
+export function useMeasurements(): Measurement[] {
+  const measurements = useLiveQuery(() => db.measurements.orderBy("date").reverse().toArray(), []);
+  return measurements ?? [];
+}
+
+export function useProgramVersions(programId?: string): ProgramVersion[] {
+  const versions = useLiveQuery(async () => {
+    if (programId) {
+      return await db.programVersions.where("programId").equals(programId).sortBy("versionNumber");
+    }
+    return await db.programVersions.orderBy("versionNumber").toArray();
+  }, [programId]);
+  return versions ?? [];
+}
+
+
+
 

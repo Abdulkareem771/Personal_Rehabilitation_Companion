@@ -429,8 +429,13 @@ export interface Measurement {
   leftThighCm?: number;
   rightThighCm?: number;
   bodyFatPct?: number;
+  shoulderAbductionDeg?: number;
+  shoulderExternalRotationDeg?: number;
+  shoulderInternalRotationDeg?: number;
+  shoulderForwardFlexionDeg?: number;
   photoIds?: string[]; // MediaAsset ids (Blobs)
 }
+
 
 // ─── Goals & Milestones ───────────────────────────────────────────────────────
 

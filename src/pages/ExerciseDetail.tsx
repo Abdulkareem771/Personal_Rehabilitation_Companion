@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Play, ShieldCheck, Sparkles, Wrench, AlertTriangle, Lightbulb, Image as ImageIcon } from "lucide-react";
-import { useExerciseById, useMediaAssets } from "@/hooks/useData";
+import { useExerciseById, useMediaAssets, useExerciseLogs } from "@/hooks/useData";
 import { useWorkoutStore } from "@/store/workoutStore";
+import { VolumePainChart, type ChartDataPoint } from "@/components/analytics/VolumePainChart";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -12,7 +13,9 @@ export function ExerciseDetail() {
   const navigate = useNavigate();
   const exercise = useExerciseById(id || "");
   const mediaAssets = useMediaAssets(id || "");
+  const logs = useExerciseLogs(id || "");
   const store = useWorkoutStore();
+
 
 
   if (!exercise) {
@@ -209,11 +212,48 @@ export function ExerciseDetail() {
 
 
         {/* Tab 3: History */}
-        <TabsContent value="history">
-          <Card className="p-8 text-center text-muted-foreground font-bold">
-            <p>Past set logs for {exercise.name} will appear here after your first completed workout.</p>
-          </Card>
+        <TabsContent value="history" className="space-y-6">
+          <VolumePainChart
+            data={logs.map((log) => {
+              const vol = log.sets.reduce((acc, s) => acc + ((s.weight || 10) * (s.reps || 10)), 0);
+              return {
+                date: log.date,
+                label: log.date.split("T")[0].slice(5),
+                volume: vol,
+                pain: log.overallPain || 0,
+              };
+            })}
+            title={`${exercise.name} Longitudinal Analytics`}
+          />
+
+          {logs.length > 0 ? (
+            <div className="space-y-3">
+              <h4 className="font-extrabold text-sm uppercase text-muted-foreground tracking-wider">Historical Logbook</h4>
+              {logs.map((log) => (
+                <Card key={log.id} className="p-4 rounded-2xl border bg-card shadow-sm space-y-2">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-sm text-foreground">{log.date.split("T")[0]}</span>
+                    <Badge variant={log.overallPain <= 2 ? "safe" : "outline"} className="font-bold">
+                      Pain: {log.overallPain} / 10
+                    </Badge>
+                  </div>
+                  <div className="flex flex-wrap gap-2 text-xs font-semibold text-muted-foreground">
+                    {log.sets.map((s, idx) => (
+                      <span key={idx} className="px-2 py-1 rounded bg-secondary text-foreground">
+                        Set {s.setNumber}: {s.weight || 0}kg × {s.reps || 0} reps
+                      </span>
+                    ))}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card className="p-8 text-center text-muted-foreground font-bold">
+              <p>Past set logs for {exercise.name} will appear here after your first completed workout.</p>
+            </Card>
+          )}
         </TabsContent>
+
 
         {/* Tab 4: Notes */}
         <TabsContent value="notes">

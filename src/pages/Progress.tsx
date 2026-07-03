@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { TrendingUp, Trophy, Flame, CheckCircle2, Plus, Target, Trash2, ArrowUpRight } from "lucide-react";
-import { useGoals } from "@/hooks/useData";
+import { useGoals, useExerciseLogs } from "@/hooks/useData";
+import { VolumePainChart } from "@/components/analytics/VolumePainChart";
 import { db } from "@/lib/db";
 import { uid, nowISO } from "@/lib/utils";
 import type { Goal } from "@/types";
@@ -13,6 +14,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 
 export function Progress() {
   const goals = useGoals();
+  const allLogs = useExerciseLogs();
+
   const [modalOpen, setModalOpen] = useState(false);
 
   // New goal form state
@@ -95,8 +98,25 @@ export function Progress() {
         </Card>
       </div>
 
+      {/* Aggregate Volume vs Pain Trajectory */}
+
+      <VolumePainChart
+        data={allLogs.map((log) => {
+          const vol = log.sets.reduce((acc, s) => acc + ((s.weight || 10) * (s.reps || 10)), 0);
+          return {
+            date: log.date,
+            label: log.date.split("T")[0].slice(5),
+            volume: vol,
+            pain: log.overallPain || 0,
+          };
+        })}
+        title="Aggregate Training Volume vs. Shoulder Discomfort"
+        subtitle="Longitudinal correlation across all completed sets and sessions."
+      />
+
       {/* Interactive Clinical Goals & Milestones */}
       <Card className="shadow-md border-border">
+
         <CardHeader className="bg-secondary/20 pb-4 border-b border-border flex flex-row items-center justify-between">
           <div>
             <CardTitle className="text-lg flex items-center gap-2">
