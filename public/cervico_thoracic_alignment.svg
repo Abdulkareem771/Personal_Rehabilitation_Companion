@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+  <!-- Background -->
+  <rect width="600" height="450" rx="24" fill="#0f172a" stroke="#334155" stroke-width="2"/>
+
+  <!-- Title & Subtitle -->
+  <text x="30" y="50" fill="#f8fafc" font-family="system-ui, sans-serif" font-weight="900" font-size="20">Cervicothoracic Posture Lever stress</text>
+  <text x="30" y="75" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="12">Biomechanical weight multiplier of anterior cervical head carriage on the shoulder girdle</text>
+
+  <!-- Split line -->
+  <line x1="300" y1="110" x2="300" y2="410" stroke="#1e293b" stroke-width="3" />
+
+  <!-- LEFT: NEUTRAL ALIGNMENT (GOOD) -->
+  <g transform="translate(0, 0)">
+    <rect x="50" y="110" width="200" height="28" rx="8" fill="#14532d" />
+    <text x="70" y="128" fill="#4ade80" font-family="system-ui, sans-serif" font-weight="black" font-size="11">✅ NEUTRAL ALIGNMENT</text>
+
+    <!-- Torso Spine (Straight) -->
+    <path d="M 150 350 L 150 260 Q 150 200 150 180" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round" />
+    
+    <!-- Skull Center (Aligned over gravity center line) -->
+    <circle cx="150" cy="140" r="26" fill="#1e293b" stroke="#4ade80" stroke-width="3" />
+    <text x="135" y="144" fill="#f8fafc" font-family="system-ui, sans-serif" font-weight="bold" font-size="11">0 in</text>
+
+    <!-- Center of gravity dashed line -->
+    <line x1="150" y1="110" x2="150" y2="380" stroke="#22c55e" stroke-width="1.5" stroke-dasharray="3,3" />
+
+    <!-- Joint Stress indicators -->
+    <circle cx="150" cy="220" r="6" fill="#22c55e" />
+
+    <!-- Leverage Metric Card -->
+    <rect x="50" y="270" width="200" height="55" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="70" y="290" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10">Effective Load at C7-T1:</text>
+    <text x="70" y="312" fill="#4ade80" font-family="monospace" font-weight="extrabold" font-size="16">10 - 12 lbs</text>
+
+    <text x="50" y="360" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">Minimal shear stress at C7-T1.</text>
+    <text x="50" y="378" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">Optimal scapular rest alignment.</text>
+  </g>
+
+  <!-- RIGHT: FORWARD HEAD CARRIAGE (BAD) -->
+  <g transform="translate(300, 0)">
+    <rect x="50" y="110" width="200" height="28" rx="8" fill="#7f1d1d" />
+    <text x="65" y="128" fill="#f87171" font-family="system-ui, sans-serif" font-weight="black" font-size="11">❌ ANTERIOR CARRIAGE</text>
+
+    <!-- Torso Spine (Bent forward) -->
+    <path d="M 120 350 L 120 260 Q 120 200 180 180" fill="none" stroke="#334155" stroke-width="6" stroke-linecap="round" />
+
+    <!-- Skull Center (Shifted forward by 3 inches / 60px) -->
+    <circle cx="180" cy="140" r="26" fill="#1e293b" stroke="#ef4444" stroke-width="3" />
+    <text x="165" y="144" fill="#f8fafc" font-family="system-ui, sans-serif" font-weight="bold" font-size="11">+3 in</text>
+
+    <!-- Center of gravity line relative to chest base -->
+    <line x1="120" y1="110" x2="120" y2="380" stroke="#64748b" stroke-width="1" stroke-dasharray="3,3" />
+
+    <!-- Offset arrow -->
+    <path d="M 120 140 L 154 140" fill="none" stroke="#ef4444" stroke-width="2" />
+    <path d="M 154 136 L 154 144 L 160 140 Z" fill="#ef4444" />
+
+    <!-- High joint stress marker (C7-T1 junction is hyper-extended) -->
+    <circle cx="140" cy="210" r="8" fill="#f43f5e" />
+    <circle cx="140" cy="210" r="16" fill="none" stroke="#f43f5e" stroke-width="2" stroke-dasharray="3,3" />
+
+    <!-- Leverage Metric Card -->
+    <rect x="50" y="270" width="200" height="55" rx="10" fill="#1e293b" stroke="#334155" stroke-width="1" />
+    <text x="70" y="290" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="10">Effective Load at C7-T1:</text>
+    <text x="70" y="312" fill="#f43f5e" font-family="monospace" font-weight="extrabold" font-size="16">42 lbs (420%)</text>
+
+    <text x="50" y="360" fill="#f87171" font-family="system-ui, sans-serif" font-size="11">Extreme levator scapulae strain.</text>
+    <text x="50" y="378" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="11">Compromises acromion clearance.</text>
+  </g>
+</svg>
