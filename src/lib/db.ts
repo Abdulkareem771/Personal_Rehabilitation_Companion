@@ -145,11 +145,10 @@ export async function seedDefaultDataIfEmpty(): Promise<void> {
       await seedWeeklyReviews();
     });
   } else {
-    if (mediaCount === 0) {
-      await db.transaction("rw", [db.mediaAssets], async () => {
-        await seedMediaAssets();
-      });
-    }
+    // Unconditionally seed media assets to capture new additions
+    await db.transaction("rw", [db.mediaAssets], async () => {
+      await seedMediaAssets();
+    });
     if (reviewCount === 0) {
       await db.transaction("rw", [db.weeklyReviews], async () => {
         await seedWeeklyReviews();
@@ -157,5 +156,6 @@ export async function seedDefaultDataIfEmpty(): Promise<void> {
     }
   }
 }
+
 
 

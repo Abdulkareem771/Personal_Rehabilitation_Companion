@@ -46,5 +46,33 @@ export const defaultMediaAssets: MediaAsset[] = [
     tags: ["posture", "ergonomcs", "neck"],
     exerciseIds: ["chin-tuck", "band-pull-apart", "face-pull"],
     createdAt: nowISO(),
+  },
+  {
+    id: "media-cuff-force-couples",
+    type: "infographic",
+    filename: "rotator_cuff_muscle_actions.svg",
+    caption: "Rotator Cuff Force Couples: The supraspinatus, infraspinatus, subscapularis, and teres minor act together to dynamically compress the humeral head into the glenoid socket.",
+    tags: ["anatomy", "rotator-cuff", "biomechanics"],
+    exerciseIds: ["band-external-rotation", "prone-yt", "face-pull", "wall-slide"],
+    createdAt: nowISO(),
+  },
+  {
+    id: "media-proprioception-loop",
+    type: "infographic",
+    filename: "shoulder_proprioception_repositioning.svg",
+    caption: "Proprioceptive Neuromuscular Loop: Rebuilding joint position awareness post-labral tear to restore protective muscle reflexes.",
+    tags: ["neuromuscular", "proprioception", "coordination"],
+    exerciseIds: ["wall-slide", "dead-bug", "serratus-punch"],
+    createdAt: nowISO(),
+  },
+  {
+    id: "media-apprehension-safe-plane",
+    type: "infographic",
+    filename: "apprehension_relocation_instability.svg",
+    caption: "Scapular Plane Clearance: Restricting reaching to the 30° anterior scapular plane minimizes strain on the compromised anterior labrum.",
+    tags: ["safety", "instability", "scapula"],
+    exerciseIds: ["prone-yt", "wall-slide", "face-pull", "chin-tuck"],
+    createdAt: nowISO(),
   }
 ];
+

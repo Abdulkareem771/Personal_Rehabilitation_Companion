@@ -181,33 +181,54 @@ export function ExerciseDetail() {
             <Card className="shadow-md border-border">
               <CardHeader className="pb-3 bg-secondary/20">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <ImageIcon size={18} className="text-primary" /> Clinical Biomechanics & Infographics ({mediaAssets.length})
+                  <ImageIcon size={18} className="text-primary" /> Clinical Biomechanics &amp; Infographics ({mediaAssets.length})
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pt-4 grid sm:grid-cols-2 gap-4">
-                {mediaAssets.map((m) => (
-                  <div key={m.id} className="p-4 rounded-2xl border bg-card space-y-2.5 shadow-sm">
-                    <div className="flex items-center justify-between">
-                      <Badge variant="outline" className="text-[10px] uppercase font-extrabold text-primary">
-                        {m.type}
-                      </Badge>
-                      <span className="text-[10px] font-mono text-muted-foreground">{m.filename}</span>
+              <CardContent className="pt-4 grid sm:grid-cols-2 gap-6">
+                {mediaAssets.map((m) => {
+                  const base = import.meta.env.BASE_URL || "/";
+                  const imageUrl = `${base}${m.filename}`.replace(/\/+/g, "/");
+                  return (
+                    <div key={m.id} className="p-4 rounded-2xl border bg-card space-y-4 shadow-sm flex flex-col justify-between">
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Badge variant="outline" className="text-[10px] uppercase font-extrabold text-primary">
+                            {m.type}
+                          </Badge>
+                          <span className="text-[10px] font-mono text-muted-foreground">{m.filename}</span>
+                        </div>
+                        <p className="text-xs font-semibold text-foreground leading-relaxed">
+                          {m.caption}
+                        </p>
+                      </div>
+
+                      {/* Image Viewer Container */}
+                      <div className="aspect-[4/3] w-full rounded-xl bg-secondary/35 border flex items-center justify-center overflow-hidden p-2">
+                        <img
+                          src={imageUrl}
+                          alt={m.caption}
+                          className="max-h-full object-contain hover:scale-105 transition-all duration-300"
+                          onError={(e) => {
+                            // Fallback to absolute local root if Base URL fails
+                            e.currentTarget.src = `/${m.filename}`;
+                          }}
+                        />
+                      </div>
+
+                      <div className="flex flex-wrap gap-1 pt-1 border-t border-border/50">
+                        {m.tags.map((t) => (
+                          <span key={t} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-secondary text-muted-foreground">
+                            #{t}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                    <p className="text-xs font-semibold text-foreground leading-relaxed">
-                      {m.caption}
-                    </p>
-                    <div className="flex flex-wrap gap-1 pt-1">
-                      {m.tags.map((t) => (
-                        <span key={t} className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-secondary text-muted-foreground">
-                          #{t}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </CardContent>
             </Card>
           )}
+
         </TabsContent>
 
 
