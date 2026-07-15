@@ -1,13 +1,15 @@
 ---
 id: ""
 title: ""
+slug: ""
 category: ""
 difficulty: ""
-phase: ""
+rehabilitationPhase: ""
 equipment: []
 primaryMuscles: []
 secondaryMuscles: []
 movementPattern: ""
+joint: ""
 planeOfMotion: ""
 safetyLevel: ""
 estimatedDuration: ""
@@ -17,9 +19,15 @@ defaultTempo: ""
 defaultRest: ""
 videoLoop: ""
 thumbnail: ""
+poster: ""
 youtube: ""
 relatedExercises: []
 tags: []
+progressions: []
+regressions: []
+contraindications: []
+clinicalNotes: []
+references: []
 ---
 
 # [Exercise Name]
@@ -37,6 +45,14 @@ tags: []
 
 ## Purpose
 <!-- The primary clinical or training objective of this exercise. -->
+
+## Knowledge Links
+<!-- Link reusable concepts instead of repeating encyclopedia-style explanations. -->
+- **Movement pattern:** 
+- **Primary joint:** 
+- **Phase:** 
+- **Tempo reference:** [Tempo Guide](../knowledge/tempo-guide.md)
+- **Pain rules:** [Pain Scale](../clinical/pain-scale.md)
 
 ## Why This Exercise Matters
 <!-- Explain the benefits and why it is included in rehabilitation or training. -->
@@ -76,6 +92,11 @@ tags: []
 ## Regressions
 - 
 
+## Clinical Decision Rules
+- **Progression:** Follow [Progression Rules](../clinical/progression-rules.md).
+- **Regression:** Follow [Regression Rules](../clinical/regression-rules.md).
+- **Stop rules:** Follow [Stop Rules](../clinical/stop-rules.md).
+
 ## Alternatives
 - 
 
@@ -98,3 +119,6 @@ tags: []
 
 ## References
 - 
+
+## Metadata
+- **Schema:** [Exercise Metadata Schema](./exercise-metadata-schema.md)

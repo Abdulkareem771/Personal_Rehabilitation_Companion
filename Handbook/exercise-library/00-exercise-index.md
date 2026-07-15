@@ -1,6 +1,15 @@
 exercise-library/
 
 00-exercise-index.md
+exercise-template.md
+exercise-metadata-schema.md
+
+Authoring references:
+
+- [Exercise Template](./exercise-template.md)
+- [Exercise Metadata Schema](./exercise-metadata-schema.md)
+- [Knowledge Base](../knowledge/README.md)
+- [Clinical Logic](../clinical/README.md)
 
 rotator-cuff/
 ├── band-external-rotation.md
